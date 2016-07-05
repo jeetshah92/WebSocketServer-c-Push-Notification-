@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <script type="text/javascript">
+      var socket = new WebSocket('ws://localhost:80');
+      socket.onopen = function() {
+          alert('handshake successfully established. May send data now...');
+          socket.send("message from state of NewYork!");
+      };
+
+      socket.onmessage = function (msg) {
+
+          alert("new message from server : " + msg.data);
+      }
+
+      socket.onclose = function() {
+        alert('connection closed');
+      };
+
+
+    </script>
+</head>
+<body>
+</body>
+</html>

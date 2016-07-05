@@ -1,0 +1,9 @@
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.exe.config
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.exe
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.pdb
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.csprojResolveAssemblyReference.cache
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.exe
+c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.pdb
+C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.exe.config
+C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.exe
+C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.pdb
