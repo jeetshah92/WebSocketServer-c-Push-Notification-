@@ -7,3 +7,6 @@ c:\users\jshah\documents\visual studio 2015\Projects\WebSocketServer\WebSocketSe
 C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.exe.config
 C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.exe
 C:\Users\jshah\Desktop\WebSocketServer\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.pdb
+C:\Users\jshah\Desktop\PushNotificationServer-c#\WebSocketServer\WebSocketServer\bin\Debug\WebSocketServer.exe.config
+C:\Users\jshah\Desktop\PushNotificationServer-c#\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.exe
+C:\Users\jshah\Desktop\PushNotificationServer-c#\WebSocketServer\WebSocketServer\obj\Debug\WebSocketServer.pdb

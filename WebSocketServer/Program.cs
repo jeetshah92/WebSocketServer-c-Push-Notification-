@@ -1,22 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using System.Text.RegularExpressions;
 using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace WebSocketServer
+namespace BlockchainLib.Business.Implementation
 {
-    class WebSocketServer
+    public class WebSocketServer
     {
-
-        static TcpListener server = null;
+        private TcpListener server = null;
+        public string IpAddress { get; set; }
+        public int port { get; set; }
         static Dictionary<string, TcpClient> connectedClients = new Dictionary<string, TcpClient>();
+
+        public WebSocketServer()
+        {
+            //no-arg constructor
+
+        }
+
+        public WebSocketServer(string IpAddress, int port)
+        {
+            this.IpAddress = IpAddress;
+            this.port = port;
+
+        }
 
         // helper function to encode the message according to Websocket's standard
         private static Byte[] encodeOutgoingMessage(String outgoingMessage)
@@ -67,7 +81,7 @@ namespace WebSocketServer
 
 
         //Helper function to decode message coming from client
-        public static string decodeMessage(Byte[] incomingMessage)
+        private static string decodeMessage(Byte[] incomingMessage)
         {
 
             //assume that message is a text message i.e. opcode 129.
@@ -86,10 +100,11 @@ namespace WebSocketServer
             Buffer.BlockCopy(incomingMessage, indexFirstMask, masks, 0, 4);
 
             indexFirstDataByte = indexFirstMask + 4;
-             
+
             data = new Byte[incomingMessage.Length - indexFirstDataByte];
 
-            for (int i = indexFirstDataByte, j = 0; i < incomingMessage.Length; i++, j++) {
+            for (int i = indexFirstDataByte, j = 0; i < incomingMessage.Length; i++, j++)
+            {
 
                 data[j] = (byte)(incomingMessage[i] ^ masks[j % 4]);
 
@@ -99,18 +114,18 @@ namespace WebSocketServer
 
             return Encoding.UTF8.GetString(data);
 
-            
+
         }
 
-        public static void ListenForClients()
+        private void ListenForClients()
         {
-            
-            server.Start();
+
+            this.server.Start();
             Console.WriteLine("Server has started on 127.0.0.1:80.{0}Waiting for a connection...", Environment.NewLine);
             while (true)
             {
 
-                server.Start();
+
                 TcpClient client = server.AcceptTcpClient();
                 Thread clientThread = new Thread(new ParameterizedThreadStart(handleClient));
                 clientThread.Start(client);
@@ -120,7 +135,7 @@ namespace WebSocketServer
 
         }
 
-        public static void handleClient(Object newClient)
+        private void handleClient(Object newClient)
         {
 
             Console.WriteLine("A client connected.");
@@ -160,50 +175,70 @@ namespace WebSocketServer
 
                     //Decode the message and if it is equal to  "Tear Down" then remove particular client from Dictionary of ConnectedClients
                     string decodedMessage = decodeMessage(bytes);
-                    
-                    if(decodedMessage.Equals("Tear Down"))
+
+                    if (decodedMessage.Equals("Tear Down"))
                     {
 
                         Console.WriteLine("message from client : " + client.Client.RemoteEndPoint + " : " + decodedMessage);
                         connectedClients.Remove(client.Client.RemoteEndPoint.ToString());
-
                         break;
-                       
+
                     }
 
                 }
             }
 
             client.Close();
+
+
         }
 
-        static void DispatchNotification(Object notification)
+        public void DispatchNotification(Object notification)
         {
-            foreach(var client in connectedClients)
+            Debug.WriteLine("connected cliens count is : " + connectedClients.Count);
+            foreach (var client in connectedClients)
             {
-                Thread DispatcherThread = new Thread(new ParameterizedThreadStart(sendNotificationToClient));
-                DispatcherThread.Start(client, notification);
+                Thread DispatcherThread = new Thread(
+
+                     () => sendNotificationToClient(client.Value, notification)
+
+                );
+
+                DispatcherThread.Start();
 
             }
 
         }
 
-        static void sendNotificationToClient(Object connectedClient, Object notification)
+        private void sendNotificationToClient(Object connectedClient, Object notification)
         {
-            TcpClient client = (TcpClient)connectedClient;
-            NetworkStream clientStream = client.GetStream();
-            Byte[] frame = encodeOutgoingMessage(notification.ToString());
-            clientStream.Write(frame, 0, frame.Length);
+
+            try
+            {
+                TcpClient client = (TcpClient)connectedClient;
+                NetworkStream clientStream = client.GetStream();
+                Byte[] frame = encodeOutgoingMessage(notification.ToString());
+                clientStream.Write(frame, 0, frame.Length);
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("problem in sending notification : " + e.Message);
+
+            }
+
 
         }
 
-
-        static void Main(string[] args)
+        public void StartServer()
         {
-           
-                server = new TcpListener(IPAddress.Parse("127.0.0.1"), 80);
+            if (server == null)
+            {
+                server = new TcpListener(IPAddress.Parse(this.IpAddress), this.port);
                 Thread listenThread = new Thread(new ThreadStart(ListenForClients));
                 listenThread.Start();
+            }
+
         }
     }
 }
